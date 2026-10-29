@@ -1,15 +1,17 @@
+> Locked baseline: EFT **1.2.5.0.48146**, SPT 5.0. Newer EFT work must use a separate branch and installation. The original `spt-5.0-48146` branch remains available as historical provenance.
+
 # OpenSesame — local SPT 5.0 / EFT 48146 port
 
 This branch ports dwesterwick's OpenSesame from upstream commit `86e785d60e636adb08f34ca9366baef616f70e91`. No public SPT 5.0 port was found in the author's branches, PRs, or three listed forks when checked on October 28–29, 2026. This is an independent experimental port, not an upstream release or a claim of compatibility with every SPT 5.0 build.
 
-Fork: https://github.com/jpeckham/SPTOpenSesame/tree/spt-5.0-48146
+Fork: https://github.com/jpeckham/SPTOpenSesame/tree/spt-5.0-eft-1.2.5.0.48146
 
 ## Build and install
 
 Requires .NET 10 SDK and an initialized SPT 5.0 installation with BepInXDX/IL2CPP and generated `BepInEx/interop` assemblies for EFT **1.2.5.0.48146**. The installation must already have launched successfully. References come from that installation; no game assemblies are distributed here.
 
 ```powershell
-dotnet build SPTOpenSesame.csproj -c Release '-p:SPTPath=C:\sptarkov\SPTarkov 5.0.0-local'
+dotnet build SPTOpenSesame.csproj -c Release '-p:SPTPath=C:\sptarkov\SPTarkov 5.0.0-BE-1.2.5.0.48146'
 ```
 
 With the client closed, copy `Build/BepInEx/plugins/OpenSesame/SPTOpenSesame.dll` to the same relative folder in your SPT installation. Remove any older OpenSesame DLL elsewhere in `BepInEx/plugins` to avoid duplicate plugins. To uninstall, close the client and remove this DLL.

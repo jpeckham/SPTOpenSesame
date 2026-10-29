@@ -6,7 +6,7 @@
     <Version>4.0.0</Version>
     <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
     <LangVersion>latest</LangVersion>
-    <SPTPath Condition="'$(SPTPath)' == ''">C:\sptarkov\SPTarkov 5.0.0-local</SPTPath>
+    <SPTPath Condition="'$(SPTPath)' == ''">C:\sptarkov\SPTarkov 5.0.0-BE-1.2.5.0.48146</SPTPath>
     <CorePath>$(SPTPath)/BepInEx/core</CorePath>
     <InteropPath>$(SPTPath)/BepInEx/interop</InteropPath>
   </PropertyGroup>
