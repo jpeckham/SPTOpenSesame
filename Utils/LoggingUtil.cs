@@ -1,7 +1,8 @@
-﻿namespace SPTOpenSesame.Utils
+namespace SPTOpenSesame.Utils
 {
     internal class LoggingUtil
     {
+        public static LoggingUtil Instance { get; set; }
         private BepInEx.Logging.ManualLogSource _logger;
 
         public LoggingUtil(BepInEx.Logging.ManualLogSource logger)

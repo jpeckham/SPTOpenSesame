@@ -1,7 +1,7 @@
-﻿using EFT;
+using EFT;
 using EFT.Interactive;
 using EFT.UI;
-using SPT.Reflection.Patching;
+using SPTushonka.Reflection.Patching;
 using SPTOpenSesame.Helpers;
 using System;
 using System.Collections;

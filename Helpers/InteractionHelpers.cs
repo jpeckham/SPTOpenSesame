@@ -1,4 +1,4 @@
-﻿using Comfort.Common;
+using Comfort.Common;
 using EFT;
 using EFT.Interactive;
 using EFT.UI;
@@ -48,12 +48,12 @@ namespace SPTOpenSesame.Helpers
 
         public static void AddDoNothingToActionList(ref AvailableInteractionState actionListObject)
         {
+            EnsureActionListIsNotNull(ref actionListObject);
+
             if (!OpenSesamePlugin.FeaturesEnabled.Value.HasFlag(OpenSesamePlugin.EFeaturesEnabled.DoNothing))
             {
                 return;
             }
-
-            EnsureActionListIsNotNull(ref actionListObject);
 
             // Create a new action to do nothing
             InteractiveObjectInteractionWrapper interactiveObjectInteractionWrapper = new InteractiveObjectInteractionWrapper();
@@ -70,16 +70,8 @@ namespace SPTOpenSesame.Helpers
 
         private static void EnsureActionListIsNotNull(ref AvailableInteractionState actionListObject)
         {
-            if (actionListObject != null)
-            {
-                return;
-            }
-
-            List<InteractionAction> list = new List<InteractionAction>();
-            actionListObject = new AvailableInteractionState
-            {
-                Actions = list
-            };
+            actionListObject ??= new AvailableInteractionState();
+            actionListObject.Actions ??= new Il2CppSystem.Collections.Generic.List<InteractionAction>();
         }
 
         public static void AddOpenSesameToActionList(this WorldInteractiveObject interactiveObject, ref AvailableInteractionState actionListObject, GamePlayerOwner owner)
@@ -139,7 +131,7 @@ namespace SPTOpenSesame.Helpers
             Switch powerSwitch = Singleton<GameWorld>.Instance.gameObject.GetOrAddComponent<PowerSwitchIdentificationComponent>().PowerSwitchOnMap;
             if (powerSwitch == null)
             {
-                Singleton<LoggingUtil>.Instance.LogError("Cannot find a power switch on the map to toggle");
+                LoggingUtil.Instance.LogError("Cannot find a power switch on the map to toggle");
                 return;
             }
 
@@ -177,7 +169,7 @@ namespace SPTOpenSesame.Helpers
 
             internal void doNothingAction()
             {
-                Singleton<LoggingUtil>.Instance.LogInfo("Nothing happened. What did you expect...?");
+                LoggingUtil.Instance.LogInfo("Nothing happened. What did you expect...?");
             }
 
             internal void unlockAndOpenDoorAction()
@@ -192,14 +184,14 @@ namespace SPTOpenSesame.Helpers
                 interactiveObject.OnEnable();
 
                 // Do not open lootable containers like safes, cash registers, etc.
-                if ((interactiveObject as LootableContainer) != null)
+                if (interactiveObject.TryCast<LootableContainer>() != null)
                 {
                     return;
                 }
 
                 if (OpenSesamePlugin.DebugMessagesEnabled.Value.HasFlag(OpenSesamePlugin.EDebugMessagesEnabled.UnlockingDoors))
                 {
-                    Singleton<LoggingUtil>.Instance.LogInfo("Opening interactive object " + interactiveObject.Id + "...");
+                    LoggingUtil.Instance.LogInfo("Opening interactive object " + interactiveObject.Id + "...");
                 }
 
                 owner.Player.MovementContext.ResetCanUsePropState();
@@ -230,19 +222,19 @@ namespace SPTOpenSesame.Helpers
             {
                 if (interactiveObject == null)
                 {
-                    Singleton<LoggingUtil>.Instance.LogError("Cannot unlock and open a null object");
+                    LoggingUtil.Instance.LogError("Cannot unlock and open a null object");
                     return false;
                 }
 
                 if (owner == null)
                 {
-                    Singleton<LoggingUtil>.Instance.LogError("A GamePlayerOwner must be defined to unlock and open object " + interactiveObject.Id);
+                    LoggingUtil.Instance.LogError("A GamePlayerOwner must be defined to unlock and open object " + interactiveObject.Id);
                     return false;
                 }
 
                 if (OpenSesamePlugin.DebugMessagesEnabled.Value.HasFlag(OpenSesamePlugin.EDebugMessagesEnabled.UnlockingDoors))
                 {
-                    Singleton<LoggingUtil>.Instance.LogInfo("Unlocking interactive object " + interactiveObject.Id + " which requires key " + interactiveObject.KeyId + "...");
+                    LoggingUtil.Instance.LogInfo("Unlocking interactive object " + interactiveObject.Id + " which requires key " + interactiveObject.KeyId + "...");
                 }
 
                 return true;
@@ -252,19 +244,19 @@ namespace SPTOpenSesame.Helpers
             {
                 if (interactiveObject == null)
                 {
-                    Singleton<LoggingUtil>.Instance.LogError("Cannot toggle a null switch");
+                    LoggingUtil.Instance.LogError("Cannot toggle a null switch");
                     return;
                 }
 
                 if (!interactiveObject.CanToggle())
                 {
-                    Singleton<LoggingUtil>.Instance.LogWarning("Cannot interact with object " + interactiveObject.Id + " right now");
+                    LoggingUtil.Instance.LogWarning("Cannot interact with object " + interactiveObject.Id + " right now");
                     return;
                 }
 
                 if (OpenSesamePlugin.DebugMessagesEnabled.Value.HasFlag(OpenSesamePlugin.EDebugMessagesEnabled.TogglingSwitches))
                 {
-                    Singleton<LoggingUtil>.Instance.LogInfo("Toggling object " + interactiveObject.Id + "...");
+                    LoggingUtil.Instance.LogInfo("Toggling object " + interactiveObject.Id + "...");
                 }
 
                 Player you = Singleton<GameWorld>.Instance.MainPlayer;

@@ -1,4 +1,4 @@
-﻿using Comfort.Common;
+using Comfort.Common;
 using EFT.Interactive;
 using SPTOpenSesame.Helpers;
 using SPTOpenSesame.Utils;
@@ -13,6 +13,8 @@ namespace SPTOpenSesame.Components
 {
     internal class PowerSwitchIdentificationComponent : MonoBehaviour
     {
+        public PowerSwitchIdentificationComponent(IntPtr pointer) : base(pointer) { }
+
         public Switch PowerSwitchOnMap { get; private set; } = null;
 
         protected void Awake()
@@ -29,12 +31,12 @@ namespace SPTOpenSesame.Components
             switch (count)
             {
                 case 0:
-                    Singleton<LoggingUtil>.Instance.LogInfo("No power switch found on map");
+                    LoggingUtil.Instance.LogInfo("No power switch found on map");
                     PowerSwitchOnMap = null;
                     break;
                 case 1:
                     PowerSwitchOnMap = powerSwitches.First();
-                    Singleton<LoggingUtil>.Instance.LogInfo($"Found power switch {PowerSwitchOnMap.Id}");
+                    LoggingUtil.Instance.LogInfo($"Found power switch {PowerSwitchOnMap.Id}");
                     break;
                 default:
                     string powerSwitchIds = string.Join(", ", powerSwitches.Select(sw => sw.Id));

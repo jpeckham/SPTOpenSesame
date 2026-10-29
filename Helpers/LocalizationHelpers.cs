@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -54,15 +54,15 @@ namespace SPTOpenSesame.Helpers
                     break;
                 }
 
-                Singleton<LoggingUtil>.Instance.LogWarning("The following locales still need new translations: " + string.Join(", ", missingLocales));
+                LoggingUtil.Instance.LogWarning("The following locales still need new translations: " + string.Join(", ", missingLocales));
 
                 if (attempts >= MAX_ATTEMPTS)
                 {
-                    Singleton<LoggingUtil>.Instance.LogError("Could not add translations for all locales");
+                    LoggingUtil.Instance.LogError("Could not add translations for all locales");
                     break;
                 }
 
-                Singleton<LoggingUtil>.Instance.LogWarning("Trying again...");
+                LoggingUtil.Instance.LogWarning("Trying again...");
             }
         }
 
@@ -77,22 +77,22 @@ namespace SPTOpenSesame.Helpers
             // Get the existing translations for the locale
             if (LocalizationManager.Instance._locales[locale] == null)
             {
-                Singleton<LoggingUtil>.Instance.LogError("Cannot load existing translations for locale \"" + locale + "\"");
+                LoggingUtil.Instance.LogError("Cannot load existing translations for locale \"" + locale + "\"");
                 return;
             }
 
             // Check if translations can be added for the locale
             if (!TryAddNewTranslationsForLocale(locale, LocalizationManager.Instance._locales[locale]))
             {
-                Singleton<LoggingUtil>.Instance.LogError("Could not load translations for locale \"" + locale + "\"");
+                LoggingUtil.Instance.LogError("Could not load translations for locale \"" + locale + "\"");
                 return;
             }
 
             updatedLocales.Add(locale);
-            Singleton<LoggingUtil>.Instance.LogDebug("Added translations for locale \"" + locale + "\"");
+            LoggingUtil.Instance.LogDebug("Added translations for locale \"" + locale + "\"");
         }
 
-        public static bool TryAddNewTranslationsForLocale(string locale, Locale existingTranslations)
+        public static bool TryAddNewTranslationsForLocale(string locale, EFT.Locale existingTranslations)
         {
             // Load the matching resource type for the selected locale
             Type resType = GetTranslationResourceType(locale);
@@ -105,7 +105,7 @@ namespace SPTOpenSesame.Helpers
                 }
 
                 // If a matching type cannot be found, load the one for English instead
-                Singleton<LoggingUtil>.Instance.LogWarning("Cannot find translations for locale \"" + locale + "\". Using translations for default locale (\"" + DEFAULT_LOCALE + "\") instead...");
+                LoggingUtil.Instance.LogWarning("Cannot find translations for locale \"" + locale + "\". Using translations for default locale (\"" + DEFAULT_LOCALE + "\") instead...");
                 return TryAddNewTranslationsForLocale(DEFAULT_LOCALE, existingTranslations);
             }
             
@@ -113,19 +113,22 @@ namespace SPTOpenSesame.Helpers
             Dictionary<string, string> newTranslations = GetNewTranslationsForLocale(locale, resType);
             if (newTranslations.Count == 0)
             {
-                Singleton<LoggingUtil>.Instance.LogWarning("No translations to add for locale \"" + locale + "\"");
+                LoggingUtil.Instance.LogWarning("No translations to add for locale \"" + locale + "\"");
                 return false;
             }
 
             // Make sure translations don't already exist for the keys that will be added
             if (newTranslations.Any(x => existingTranslations.ContainsKey(x.Key)))
             {
-                Singleton<LoggingUtil>.Instance.LogError("Duplicate translations found for locale \"" + locale + "\". Translations will not be added.");
+                LoggingUtil.Instance.LogError("Duplicate translations found for locale \"" + locale + "\". Translations will not be added.");
                 return false;
             }
 
             // Add the new translations and track that the locale has been updated
-            existingTranslations.AddRange(newTranslations);
+            foreach (var translation in newTranslations)
+            {
+                existingTranslations.Add(translation.Key, translation.Value);
+            }
 
             return true;
         }
@@ -148,11 +151,11 @@ namespace SPTOpenSesame.Helpers
                 string translation = resEntry.GetValue(null, null) as string;
                 if ((translation == null) || (translation.Length == 0))
                 {
-                    Singleton<LoggingUtil>.Instance.LogError("Invalid translation for key \"" + resEntry.Name + "\" for locale \"" + locale + "\"");
+                    LoggingUtil.Instance.LogError("Invalid translation for key \"" + resEntry.Name + "\" for locale \"" + locale + "\"");
                     continue;
                 }
 
-                //Singleton<LoggingUtil>.Instance.LogInfo("Found translation for \"" + resEntry.Name + "\" for locale \"" + locale + "\": " + translation);
+                //LoggingUtil.Instance.LogInfo("Found translation for \"" + resEntry.Name + "\" for locale \"" + locale + "\": " + translation);
                 translations.Add(resEntry.Name, translation);
             }
 

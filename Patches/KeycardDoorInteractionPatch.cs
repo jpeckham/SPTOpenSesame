@@ -1,8 +1,8 @@
-﻿using Comfort.Common;
+using Comfort.Common;
 using EFT;
 using EFT.Interactive;
 using EFT.UI;
-using SPT.Reflection.Patching;
+using SPTushonka.Reflection.Patching;
 using SPTOpenSesame.Helpers;
 using SPTOpenSesame.Utils;
 using System;
@@ -37,7 +37,7 @@ namespace SPTOpenSesame.Patches
 
             if (OpenSesamePlugin.DebugMessagesEnabled.Value.HasFlag(OpenSesamePlugin.EDebugMessagesEnabled.DoorInteractions))
             {
-                Singleton<LoggingUtil>.Instance.LogInfo("Checking available actions for door: " + door.Id + "...");
+                LoggingUtil.Instance.LogInfo("Checking available actions for door: " + door.Id + "...");
             }
 
             if (!OpenSesamePlugin.FeaturesEnabled.Value.HasFlag(OpenSesamePlugin.EFeaturesEnabled.UnlockDoors))

@@ -1,4 +1,7 @@
-﻿using BepInEx;
+using BepInEx;
+using BepInEx.Unity.IL2CPP;
+using Il2CppInterop.Runtime.Injection;
+using SPTOpenSesame.Components;
 using BepInEx.Configuration;
 using Comfort.Common;
 using EFT;
@@ -10,8 +13,9 @@ using System.Reflection;
 
 namespace SPTOpenSesame
 {
-    [BepInPlugin("com.danw.opensesame", "DanW-OpenSesame", "3.0.0")]
-    public class OpenSesamePlugin : BaseUnityPlugin
+    [BepInPlugin("com.danw.opensesame", "DanW-OpenSesame", "4.0.0")]
+    [BepInDependency("com.sptushonka.core", "5.0.0")]
+    public class OpenSesamePlugin : BasePlugin
     {
         [Flags]
         public enum EFeaturesEnabled
@@ -36,23 +40,23 @@ namespace SPTOpenSesame
         public static ConfigEntry<EFeaturesEnabled> FeaturesEnabled;
         public static ConfigEntry<EDebugMessagesEnabled> DebugMessagesEnabled;
 
-        protected void Awake()
+        public override void Load()
         {
-            Logger.LogInfo("Loading OpenSesame...");
-            Singleton<LoggingUtil>.Create(new LoggingUtil(Logger));
+            Log.LogInfo("Loading OpenSesame...");
+            LoggingUtil.Instance = new LoggingUtil(Log);
+            addConfigOptions();
+            ClassInjector.RegisterTypeInIl2Cpp<PowerSwitchIdentificationComponent>();
 
             new Patches.InteractiveObjectInteractionPatch().Enable();
             new Patches.KeycardDoorInteractionPatch().Enable();
             new Patches.NoPowerTipInteractionPatch().Enable();
             new Patches.SwitchInteractionPatch().Enable();
 
-            addConfigOptions();
-
             // Add a listener to automatically add translations when EFT first loads and when the user switches languages
-            Singleton<LoggingUtil>.Instance.LogInfo("Adding locale update listener...");
+            LoggingUtil.Instance.LogInfo("Adding locale update listener...");
             LocalizationManager.Instance.AddLocaleUpdateListener(Helpers.LocalizationHelpers.AddNewTranslationsForLoadedLocales);
 
-            Singleton<LoggingUtil>.Instance.LogInfo("Loading OpenSesame...done.");
+            LoggingUtil.Instance.LogInfo("Loading OpenSesame...done.");
         }
 
         private void addConfigOptions()

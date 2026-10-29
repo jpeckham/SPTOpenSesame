@@ -1,190 +1,27 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{B73B1331-A251-4EEA-A8CF-FCEF16ED4C06}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SPTOpenSesame</RootNamespace>
+    <TargetFramework>net10.0</TargetFramework>
     <AssemblyName>SPTOpenSesame</AssemblyName>
-    <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <Deterministic>true</Deterministic>
-    <TargetFrameworkProfile />
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
+    <RootNamespace>SPTOpenSesame</RootNamespace>
+    <Version>4.0.0</Version>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <LangVersion>latest</LangVersion>
+    <SPTPath Condition="'$(SPTPath)' == ''">C:\sptarkov\SPTarkov 5.0.0-local</SPTPath>
+    <CorePath>$(SPTPath)/BepInEx/core</CorePath>
+    <InteropPath>$(SPTPath)/BepInEx/interop</InteropPath>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="0Harmony">
-      <HintPath>..\..\..\BepInEx\core\0Harmony.dll</HintPath>
-    </Reference>
-    <Reference Include="Assembly-CSharp">
-      <HintPath>..\..\..\EscapeFromTarkov_Data\Managed\Assembly-CSharp.dll</HintPath>
-    </Reference>
-    <Reference Include="BepInEx">
-      <HintPath>..\..\..\BepInEx\core\BepInEx.dll</HintPath>
-    </Reference>
-    <Reference Include="Comfort">
-      <HintPath>..\..\..\EscapeFromTarkov_Data\Managed\Comfort.dll</HintPath>
-    </Reference>
-    <Reference Include="Comfort.Unity">
-      <HintPath>..\..\..\EscapeFromTarkov_Data\Managed\Comfort.Unity.dll</HintPath>
-    </Reference>
-    <Reference Include="DissonanceVoip">
-      <HintPath>..\..\..\EscapeFromTarkov_Data\Managed\DissonanceVoip.dll</HintPath>
-    </Reference>
-    <Reference Include="Sirenix.Serialization, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\EscapeFromTarkov_Data\Managed\Sirenix.Serialization.dll</HintPath>
-    </Reference>
-    <Reference Include="spt-common">
-      <HintPath>..\..\..\BepInEx\plugins\spt\spt-common.dll</HintPath>
-    </Reference>
-    <Reference Include="spt-reflection">
-      <HintPath>..\..\..\BepInEx\plugins\spt\spt-reflection.dll</HintPath>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Net.Http" />
-    <Reference Include="System.Xml" />
-    <Reference Include="UnityEngine">
-      <HintPath>..\..\..\EscapeFromTarkov_Data\Managed\UnityEngine.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine.CoreModule">
-      <HintPath>..\..\..\EscapeFromTarkov_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine.PhysicsModule">
-      <HintPath>..\..\..\EscapeFromTarkov_Data\Managed\UnityEngine.PhysicsModule.dll</HintPath>
-    </Reference>
+    <Reference Include="BepInEx.Core"><HintPath>$(CorePath)/BepInEx.Core.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="BepInEx.Unity.IL2CPP"><HintPath>$(CorePath)/BepInEx.Unity.IL2CPP.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="0Harmony"><HintPath>$(CorePath)/0Harmony.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="Il2CppInterop.Runtime"><HintPath>$(CorePath)/Il2CppInterop.Runtime.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="Il2CppInterop.Common"><HintPath>$(CorePath)/Il2CppInterop.Common.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="SPTushonka.Reflection"><HintPath>$(SPTPath)/BepInEx/plugins/sptushonka/SPTushonka.Reflection.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="$(InteropPath)/*.dll"><Private>false</Private></Reference>
+    <Compile Remove="tests/**/*.cs" />
+    <EmbeddedResource Remove="tests/**/*" />
   </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Components\PowerSwitchIdentificationComponent.cs" />
-    <Compile Include="Helpers\InteractionHelpers.cs" />
-    <Compile Include="Helpers\LocalizationHelpers.cs" />
-    <Compile Include="Patches\SwitchInteractionPatch.cs" />
-    <Compile Include="Patches\InteractiveObjectInteractionPatch.cs" />
-    <Compile Include="Patches\KeycardDoorInteractionPatch.cs" />
-    <Compile Include="Patches\NoPowerTipInteractionPatch.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="OpenSesamePlugin.cs" />
-    <Compile Include="Resources\jp.Designer.cs">
-      <DependentUpon>jp.resx</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
-    <Compile Include="Resources\kr.Designer.cs">
-      <DependentUpon>kr.resx</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
-    <Compile Include="Resources\es_mx.Designer.cs">
-      <DependentUpon>es_mx.resx</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
-    <Compile Include="Resources\ge.Designer.cs">
-      <DependentUpon>ge.resx</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
-    <Compile Include="Resources\fr.Designer.cs">
-      <DependentUpon>fr.resx</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
-    <Compile Include="Resources\es.Designer.cs">
-      <DependentUpon>es.resx</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
-    <Compile Include="Resources\po.Designer.cs">
-      <DependentUpon>po.resx</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
-    <Compile Include="Resources\ru.Designer.cs">
-      <DependentUpon>ru.resx</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
-    <Compile Include="Resources\en.Designer.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>en.resx</DependentUpon>
-    </Compile>
-    <Compile Include="Resources\ch.Designer.cs">
-      <DependentUpon>ch.resx</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
-    <Compile Include="Utils\LoggingUtil.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="README.md" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Resources\jp.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>jp.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\kr.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>kr.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\es_mx.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>es_mx.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\ge.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>ge.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\fr.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>fr.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\es.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>es.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\po.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>po.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\ru.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>ru.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\en.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>en.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\ch.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>ch.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup />
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Target Name="StagePlugin" AfterTargets="Build">
+    <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(ProjectDir)Build/BepInEx/plugins/OpenSesame" />
+  </Target>
 </Project>
