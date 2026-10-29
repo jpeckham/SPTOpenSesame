@@ -54,7 +54,9 @@ namespace SPTOpenSesame
 
             // Add a listener to automatically add translations when EFT first loads and when the user switches languages
             LoggingUtil.Instance.LogInfo("Adding locale update listener...");
-            LocalizationManager.Instance.AddLocaleUpdateListener(Helpers.LocalizationHelpers.AddNewTranslationsForLoadedLocales);
+            LocalizationManager.Instance.AddLocaleUpdateListener(
+                Il2CppInterop.Runtime.DelegateSupport.ConvertDelegate<Il2CppSystem.Action>(
+                    (Action)Helpers.LocalizationHelpers.AddNewTranslationsForLoadedLocales));
 
             LoggingUtil.Instance.LogInfo("Loading OpenSesame...done.");
         }
